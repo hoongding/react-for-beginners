@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--1. html만들기-->
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function MinutesToHours() {
+      const [amount, setAmount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false); // 현재 값을 받아서 그 반대의 값을 내놓는다.
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+
+      const reset = () => setAmount(0);
+      const onInvert = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label htmlFor="minutes">Minutes</label>
+            <input
+              value={inverted ? amount * 60 : amount} // inverted가 true면 왼쪽을 띄울거고 false면 오른쪽걸 띄울거임!
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={inverted === true} // inverted가 false면 false를 리턴, 이렇게 쓰는 방식은 일반적인 JS 문법이다!
+            />
+          </div>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              value={inverted ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              onChange={onChange}
+              disabled={inverted === false} // inverted가 false면 true를 리턴, true면 false를 리턴.
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>
+            {inverted ? "Turn back" : "Invert"}
+          </button>
+        </div>
+      );
+    }
+    function KmToMiles() {
+      const [amount, setAmount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = function (event) {
+        setAmount(event.target.value);
+      };
+      const reset = function () {
+        setAmount(0);
+      };
+      const onInvert = function () {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label htmlFor="Km">Km</label>
+            <input
+              value={inverted ? amount / 0.62137 : amount}
+              type="number"
+              id="km"
+              placeholder="Km"
+              onChange={onChange}
+              disabled={inverted === true}
+            />
+          </div>
+          <div>
+            <label htmlFor="Miles">Miles</label>
+            <input
+              value={inverted ? amount : amount * 0.62137}
+              type="number"
+              id="miles"
+              placeholder="Miles"
+              onChange={onChange}
+              disabled={inverted === false}
+            />
+          </div>
+
+          <div>
+            <button onClick={reset}>Reset</button>
+            <button onClick={onInvert}>Invert</button>
+          </div>
+        </div>
+      );
+    }
+    function App() {
+      const [index, setIndex] = React.useState("xx"); // "0" : default state.
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="xx">Select your options</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "xx" ? "Please select your units" : null}
+          {
+            index === "0" ? <MinutesToHours /> : null
+            //여기에 JS 문법을 쓸 수 있다~!!~
+          }
+          {index === "1" ? <KmToMiles /> : null}
+        </div>
+      );
+    }
+    const root = document.getElementById("root"); //root를 HTML로부터 가져온다.
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
