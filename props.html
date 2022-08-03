@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--1. html만들기-->
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+  <script type="text/babel">
+    function Btn({ text, fontSize = 16 }) {
+      // 우리가 적용하고 싶은 Style의 버튼을 하나 만들어서 재사용한다!
+      return (
+        <button
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: 10,
+            fontSize,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+    const MemorizedBtn = React.memo(Btn);
+
+    Btn.propTypes = {
+      // Prop의 Type을 검사하여 경고 문구를 띄워준다!
+      text: PropTypes.string,
+      fontSize: PropTypes.number,
+    };
+    function App() {
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("Revert Changes");
+      return (
+        <div>
+          <MemorizedBtn text={value} changeValue={changeValue} fontSize={18} />
+          <MemorizedBtn text="Continue" />
+        </div>
+      );
+    }
+    const root = document.getElementById("root"); //root를 HTML로부터 가져온다.
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
